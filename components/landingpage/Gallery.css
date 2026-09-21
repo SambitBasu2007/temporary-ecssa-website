@@ -1,0 +1,23 @@
+.gallery__figure {
+  margin: 40px 0 0;
+}
+
+.gallery__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tint);
+}
+
+.gallery__image {
+  object-fit: cover;
+}
+
+.gallery__caption {
+  margin-top: 16px;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--text-muted);
+}

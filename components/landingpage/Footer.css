@@ -1,0 +1,90 @@
+.site-footer {
+  background: var(--bg-tint);
+  border-top: 1px solid var(--border);
+  scroll-margin-top: var(--header-h);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  padding-block: 64px;
+}
+
+@media (min-width: 768px) {
+  .site-footer__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.site-footer__column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-footer__emblem {
+  width: 48px;
+  height: 48px;
+}
+
+.site-footer__college {
+  font-size: 0.875rem;
+  color: var(--heading);
+}
+
+.site-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-footer__link {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color 0.2s var(--ease);
+}
+
+.site-footer__link:hover {
+  color: var(--blue);
+}
+
+.site-footer__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.site-footer__social {
+  display: inline-flex;
+  color: var(--text-muted);
+  transition: color 0.2s var(--ease);
+}
+
+.site-footer__social:hover {
+  color: var(--blue);
+}
+
+.site-footer__bottom {
+  border-top: 1px solid var(--border);
+}
+
+.site-footer__bottom-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-block: 24px;
+}
+
+.site-footer__legal {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .site-footer__bottom-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

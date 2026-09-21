@@ -1,0 +1,291 @@
+/* ---------------------------------------------------------------------------
+   ECSSA — global styles, light theme
+   Plain CSS (no Tailwind): design tokens, reset, shared layout + utilities.
+   Component-specific rules live next to each component in components/*.css
+
+   The palette is four colors only: black, white, #041b3b (navy) and #0374df
+   (blue). Anything translucent below is a tint of one of those.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* The palette */
+  --black: #000000;
+  --white: #ffffff;
+  --navy: #041b3b;
+  --blue: #0374df;
+
+  /* Surfaces */
+  --bg: var(--white);
+  --bg-tint: rgba(4, 27, 59, 0.035);
+  --backdrop: rgba(4, 27, 59, 0.38);
+
+  /* Text */
+  --text: var(--black);
+  --heading: var(--navy);
+  --text-muted: rgba(4, 27, 59, 0.68);
+  --text-on-accent: var(--white);
+
+  /* Lines */
+  --border: rgba(4, 27, 59, 0.14);
+  --border-strong: rgba(4, 27, 59, 0.3);
+
+  /* Blue states */
+  --blue-soft: rgba(3, 116, 223, 0.1);
+  --blue-hover: rgba(3, 116, 223, 0.88);
+  --blue-line: rgba(3, 116, 223, 0.42);
+
+  /* White halo, so copy stays legible over the hero's ink */
+  --halo: 0 0 6px var(--white), 0 0 14px rgba(255, 255, 255, 0.92);
+
+  /* Layout + motion */
+  --container: 1120px;
+  --gutter: 24px;
+  --header-h: 64px;
+  --radius: 8px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  /* Geist is loaded via next/font in app/layout.tsx (variable + className). */
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ------------------------------- layout ---------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: 96px;
+}
+
+/* white */
+.section--plain {
+  background: var(--bg);
+}
+
+/* a whisper of navy over white, to keep the page's rhythm without a second color */
+.section--tinted {
+  background: var(--bg-tint);
+}
+
+/* ---------------------------- section heads ------------------------------ */
+
+.section-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.section-title {
+  margin-top: 12px;
+  font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--heading);
+}
+
+.section-note {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* ------------------------------- buttons --------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease),
+    color 0.2s var(--ease), transform 0.12s var(--ease);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--primary {
+  background: var(--blue);
+  color: var(--text-on-accent);
+}
+
+.btn--primary:hover {
+  background: var(--blue-hover);
+}
+
+.btn--secondary {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.btn--secondary:hover {
+  background: var(--blue-soft);
+}
+
+/* Header-sized variant (compact) */
+.btn--sm {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+.btn--block {
+  width: 100%;
+  padding: 12px 16px;
+}
+
+.link-arrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--blue);
+}
+
+.link-arrow:hover {
+  text-decoration: underline;
+}
+
+/* ------------------------------ animation -------------------------------- */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-in {
+  animation: fade-in-up 0.6s var(--ease) both;
+}
+
+/* Children of a [data-stagger] container fade in 100ms apart. */
+[data-stagger] > * {
+  animation: fade-in-up 0.6s var(--ease) both;
+}
+
+[data-stagger] > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+[data-stagger] > *:nth-child(2) {
+  animation-delay: 100ms;
+}
+[data-stagger] > *:nth-child(3) {
+  animation-delay: 200ms;
+}
+[data-stagger] > *:nth-child(4) {
+  animation-delay: 300ms;
+}
+[data-stagger] > *:nth-child(5) {
+  animation-delay: 400ms;
+}
+[data-stagger] > *:nth-child(6) {
+  animation-delay: 500ms;
+}
+
+@keyframes nudge-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+/* ------------------------------ responsive ------------------------------- */
+
+@media (max-width: 767px) {
+  .section {
+    padding-block: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

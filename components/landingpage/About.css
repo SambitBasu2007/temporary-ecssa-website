@@ -1,0 +1,59 @@
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .about__grid {
+    /* 3 / 2 split of a 5-column grid */
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+.about__body {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  max-width: 560px;
+}
+
+.about__body p {
+  color: var(--text-muted);
+}
+
+.about__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.about__stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.about__stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--blue);
+}
+
+.about__stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.about__pattern {
+  display: flex;
+  justify-content: center;
+}
+
+.about__pattern svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}

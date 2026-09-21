@@ -1,0 +1,121 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: calc(var(--header-h) + 48px) 0 112px;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: crosshair;
+}
+
+/* the copy sits above the sketch canvas (.hero-sketch has pointer-events: none,
+   so hovering the words still draws) */
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--container);
+  padding-inline: var(--gutter);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+/* The sketch draws under the wordmark, so give it the same white halo the
+   original page put behind its headings. */
+.hero__logo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  filter: drop-shadow(0 0 6px var(--white)) drop-shadow(0 0 14px rgba(255, 255, 255, 0.92));
+}
+
+.hero__tagline {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+  text-shadow: var(--halo);
+}
+
+.hero__intro {
+  max-width: 480px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-shadow: var(--halo);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* solid-ish backgrounds keep the buttons readable where ink lands */
+.hero__actions .btn--secondary {
+  background: var(--white);
+}
+
+.hero__hint {
+  max-width: 560px;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  text-shadow: var(--halo);
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue);
+}
+
+.hero__scroll-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  text-shadow: var(--halo);
+}
+
+.hero__scroll-icon {
+  display: inline-flex;
+  animation: nudge-down 2s var(--ease) infinite;
+}
+
+/* ------------------------------- responsive ------------------------------ */
+
+@media (max-width: 767px) {
+  .hero {
+    padding: calc(56px + 40px) 0 104px;
+  }
+
+  .hero__logo {
+    max-width: 300px;
+  }
+
+  .hero__tagline {
+    font-size: 1.125rem;
+  }
+}
