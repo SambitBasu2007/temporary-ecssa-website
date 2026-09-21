@@ -32,11 +32,40 @@
 
 /* The sketch draws under the wordmark, so give it the same white halo the
    original page put behind its headings. */
+.hero__logo-wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  max-width: 400px;
+}
+
 .hero__logo {
   width: 100%;
   max-width: 400px;
   height: auto;
   filter: drop-shadow(0 0 6px var(--white)) drop-shadow(0 0 14px rgba(255, 255, 255, 0.92));
+}
+
+/* Invisible hit-target inset 8 px on every side so it's slightly smaller
+   than the logo image. No background / border so it's completely invisible. */
+.hero__logo-btn {
+  position: absolute;
+  inset: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.15s ease;
+}
+
+.hero__logo-btn:active {
+  transform: scale(0.97);
+}
+
+/* Canvas (Lottie state) is also clickable — pointer cursor signals this */
+.hero__logo--lottie {
+  cursor: pointer;
 }
 
 .hero__tagline {
@@ -111,6 +140,7 @@
     padding: calc(56px + 40px) 0 104px;
   }
 
+  .hero__logo-wrap,
   .hero__logo {
     max-width: 300px;
   }
