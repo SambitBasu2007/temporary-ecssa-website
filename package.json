@@ -10,6 +10,7 @@
     "assets": "node scripts/generate-assets.mjs"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-web": "^0.80.0",
     "@phosphor-icons/react": "^2.1.10",
     "geist": "^1.3.1",
     "next": "^15.5.4",
