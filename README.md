@@ -1,3 +1,5 @@
+https://temporary-ecssa-website.vercel.app/
+
 # ECSSA — Electronics & Computer Science Student Association
 
 Official single-page landing page. **Next.js (App Router) + React + TypeScript**, styled with
