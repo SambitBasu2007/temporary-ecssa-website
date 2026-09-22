@@ -64,8 +64,8 @@ export default function Header() {
             <Image
               src="/landingpage/logo.png"
               alt="ECSSA — Electronics and Computer Science Student Association"
-              width={504}
-              height={495}
+              width={482}
+              height={476}
               className="site-header__logo"
               priority
             />
@@ -111,8 +111,8 @@ export default function Header() {
           <Image
             src="/landingpage/logo.png"
             alt="ECSSA"
-            width={504}
-            height={495}
+            width={482}
+            height={476}
             className="sidebar__logo"
           />
           <button

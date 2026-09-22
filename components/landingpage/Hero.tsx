@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 
-import HeroSketch from "./HeroSketch";
 import "./Hero.css";
 
 export default function Hero() {
@@ -33,9 +32,6 @@ export default function Hero() {
 
   return (
     <section id="hero" className="hero">
-      {/* the interactive background: an auto-drafting pen you can also draw with */}
-      <HeroSketch />
-
       <div className="hero__inner">
         <div className="hero__content" data-stagger>
 
@@ -45,8 +41,8 @@ export default function Hero() {
               <canvas
                 ref={canvasRef}
                 className="hero__logo hero__logo--lottie"
-                width={504}
-                height={495}
+                width={482}
+                height={476}
                 aria-label="ECSSA animated logo"
                 onClick={() => setShowLottie(false)}
               />
@@ -55,8 +51,8 @@ export default function Hero() {
                 <Image
                   src="/landingpage/logo.png"
                   alt="ECSSA — Electronics and Computer Science Student Association"
-                  width={504}
-                  height={495}
+                  width={482}
+                  height={476}
                   className="hero__logo"
                   priority
                 />
@@ -85,10 +81,6 @@ export default function Hero() {
             </Link>
           </div>
 
-          <p className="hero__hint">
-            Circuit and code figures draft themselves here — move your cursor or finger to draw too ·
-            figures self-erase after about three seconds
-          </p>
         </div>
       </div>
 

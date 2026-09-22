@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { User } from "@phosphor-icons/react/dist/ssr";
 
+import Reveal from "./Reveal";
 import "./Committee.css";
 
 const MEMBERS = [
@@ -14,25 +15,29 @@ export default function Committee() {
   return (
     <section id="committee" className="section section--plain">
       <div className="container">
-        <h2 className="section-title">Core Committee</h2>
+        <Reveal>
+          <h2 className="section-title">Core Committee</h2>
+        </Reveal>
 
         <ul className="committee__grid">
-          {MEMBERS.map((member) => (
-            <li key={member.role} className="committee__member">
+          {MEMBERS.map((member, i) => (
+            <Reveal key={member.role} tag="li" delay={100 + i * 100} className="committee__member">
               <span className="committee__avatar" aria-hidden="true">
                 <User size={40} weight="duotone" />
               </span>
               <h3 className="committee__name">{member.name}</h3>
               <p className="committee__role">{member.role}</p>
-            </li>
+            </Reveal>
           ))}
         </ul>
 
-        <p className="committee__more">
-          <Link href="/committee" className="link-arrow">
-            View full committee →
-          </Link>
-        </p>
+        <Reveal delay={200}>
+          <p className="committee__more">
+            <Link href="/committee" className="link-arrow">
+              View full committee →
+            </Link>
+          </p>
+        </Reveal>
       </div>
     </section>
   );

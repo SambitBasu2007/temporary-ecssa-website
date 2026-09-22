@@ -34,9 +34,6 @@
   --blue-hover: rgba(3, 116, 223, 0.88);
   --blue-line: rgba(3, 116, 223, 0.42);
 
-  /* White halo, so copy stays legible over the hero's ink */
-  --halo: 0 0 6px var(--white), 0 0 14px rgba(255, 255, 255, 0.92);
-
   /* Layout + motion */
   --container: 1120px;
   --gutter: 24px;
@@ -76,6 +73,35 @@ h4,
 p,
 figure {
   margin: 0;
+}
+
+/* ---------------------------- scroll reveal ------------------------------ */
+/* Premium-style entrance: content fades and rises slightly the first time it
+   scrolls into view. transform + opacity only. Elements stay hidden only when
+   JS is running (html.no-js removed by Reveal) and motion is allowed. */
+
+html:not(.no-js) .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+html:not(.no-js) .reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.no-js) .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 img,

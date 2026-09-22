@@ -1,45 +1,70 @@
-.domains__title {
-  text-align: center;
-}
-
-.domains__grid {
+.domain-split {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
-  margin-top: 48px;
+  gap: 32px;
+  margin-top: 56px;
+  align-items: stretch;
 }
 
 @media (min-width: 768px) {
-  .domains__grid {
-    grid-template-columns: repeat(3, 1fr);
+  .domain-split {
+    grid-template-columns: 5fr 6fr;
+    gap: 48px;
+  }
+
+  /* Computer Science sub-section: canvas left, text right.
+     DOM order is text-first for mobile; desktop reorders. */
+  .domain-split--flip .domain-split__canvas {
+    order: -1;
+  }
+
+  .domain-split__canvas {
+    height: 460px;
   }
 }
 
-.domain-card {
-  padding: 32px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: border-color 0.2s var(--ease);
+.domain-split__label,
+.domain-split__text .section-label {
+  display: block;
 }
 
-.domain-card:hover {
-  border-color: var(--blue);
+/* Centered text column in both sub-sections */
+.domain-split__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.domain-card__icon {
-  color: var(--blue);
-}
-
-.domain-card__title {
-  margin-top: 20px;
-  font-size: 1.25rem;
-  font-weight: 600;
+.domain-split__heading {
+  margin-top: 12px;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--heading);
 }
 
-.domain-card__description {
-  margin-top: 8px;
-  font-size: 0.875rem;
+.domain-split__copy {
+  margin-top: 14px;
+  max-width: 46ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
   color: var(--text-muted);
+}
+
+.domain-split__text .domain-split__copy {
+  margin-inline: auto;
+}
+
+.domain-split__hint {
+  margin-top: 18px;
+  font-size: 0.8125rem;
+  color: var(--blue);
+  letter-spacing: 0.02em;
+}
+
+/* On mobile the canvas gets a fixed height between the two text blocks */
+@media (max-width: 767px) {
+  .domain-split__canvas {
+    height: 360px;
+  }
 }

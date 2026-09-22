@@ -1,0 +1,106 @@
+.model-viewer {
+  position: relative;
+  height: 100%;
+  min-height: 380px;
+}
+
+.model-viewer__canvas {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tint);
+  border: 1px solid var(--border);
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.model-viewer__canvas:active {
+  cursor: grabbing;
+}
+
+.model-viewer__gl {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Loading overlay: lottie logo over the empty canvas */
+.model-viewer__loader {
+  position: absolute;
+  inset: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--bg-tint);
+  opacity: 1;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.model-viewer__loader.is-hidden {
+  opacity: 0;
+}
+
+.model-viewer__lottie {
+  width: 96px;
+  height: 96px;
+}
+
+.model-viewer__lottie canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.model-viewer__loader-label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Cycle controls */
+.model-viewer__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+}
+
+.model-viewer__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--heading);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.1s var(--ease);
+}
+
+.model-viewer__arrow:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.model-viewer__arrow:active {
+  transform: scale(0.96);
+}
+
+.model-viewer__name {
+  min-width: 180px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--heading);
+}

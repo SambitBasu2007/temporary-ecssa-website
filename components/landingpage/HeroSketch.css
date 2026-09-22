@@ -1,14 +1,23 @@
-.hero-sketch {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero-sketch canvas {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100% !important;
-  height: 100% !important;
-}
+/*
+ * HeroSketch — intentionally empty for now.
+ *
+ * This stylesheet used to position the p5 canvas layer behind the hero copy.
+ * The sketch is disabled (see HeroSketch.tsx), so the rules are removed;
+ * they are documented here for a faithful restore:
+ *
+ *   .hero-sketch {
+ *     position: absolute;
+ *     inset: 0;
+ *     z-index: 1;            (the copy sat above it in .hero__inner, z-index: 2)
+ *     pointer-events: none;  (pointer tracking lived on window, so hovering
+ *                             the words still drew)
+ *   }
+ *
+ *   .hero-sketch canvas {
+ *     position: absolute;
+ *     left: 0;
+ *     top: 0;
+ *     width: 100% !important;   (p5 sizes the canvas itself; !important keeps
+ *     height: 100% !important;   it stretched to the hero on resize)
+ *   }
+ */

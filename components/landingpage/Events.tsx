@@ -2,19 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarBlank, MapPin } from "@phosphor-icons/react/dist/ssr";
 
+import Reveal from "./Reveal";
 import "./Events.css";
 
 export default function Events() {
   return (
     <section id="events" className="section section--plain">
       <div className="container">
-        <h2 className="section-title">Upcoming Events</h2>
+        <Reveal>
+          <h2 className="section-title">Upcoming Events</h2>
+        </Reveal>
 
-        <article className="event-card">
+        <Reveal delay={120} tag="article" className="event-card">
           <div className="event-card__media">
-            {/* Placeholder — swap for a real MOSAIC photo in public/events/ */}
+            {/* Same photo as the first card in the Moments carousel
+                (public/moments/moment-01.png) — swap both for a real MOSAIC shot */}
             <Image
-              src="https://picsum.photos/seed/ecssa-mosaic/600/400"
+              src="/events/mosaic.jpg"
               alt="Attendees at a past ECSSA technical fest"
               width={600}
               height={400}
@@ -45,9 +49,11 @@ export default function Events() {
               Register Interest
             </Link>
           </div>
-        </article>
+        </Reveal>
 
-        <p className="section-note events__note">More events coming soon — stay tuned.</p>
+        <Reveal delay={200}>
+          <p className="section-note events__note">More events coming soon — stay tuned.</p>
+        </Reveal>
       </div>
     </section>
   );
