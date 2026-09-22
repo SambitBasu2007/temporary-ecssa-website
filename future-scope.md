@@ -1,6 +1,11 @@
 # Future Scope
 
 ## Hero Sketch (p5)
+
+Currently removed — the hero renders as a plain blank section. `lib/hero-sketch.ts` and
+`components/landingpage/HeroSketch.tsx` are kept as comment-only placeholders with full restore
+notes; `scripts/import-hero-sketch.mjs` regenerates the engine from the original source.
+
 - Ink colors: the brush is monochrome black by design; a navy/blue ink palette would tie it closer to the brand
 - A static first frame for `prefers-reduced-motion` instead of no sketch at all
 - Pause the auto pen when the hero scrolls out of view
