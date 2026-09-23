@@ -1,6 +1,6 @@
 .gallery__stage {
   position: relative;
-  height: 880px;
+  height: 820px;
   margin-top: 16px;
 }
 
@@ -28,7 +28,7 @@
 
 @media (max-width: 767px) {
   .gallery__stage {
-    height: 620px;
+    height: 560px;
     margin-top: 8px;
   }
 }

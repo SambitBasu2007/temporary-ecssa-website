@@ -18,27 +18,27 @@ const MOMENTS = [
     description: "",
   },
   {
-    image: "/moments/moment-02.jpg",
+    image: "/moments/moment-01.png",
     text: "something",
     description: "",
   },
   {
-    image: "/moments/moment-03.jpg",
+    image: "/moments/moment-01.png",
     text: "something",
     description: "",
   },
   {
-    image: "/moments/moment-04.jpg",
+    image: "/moments/moment-01.png",
     text: "something",
     description: "",
   },
   {
-    image: "/moments/moment-05.jpg",
+    image: "/moments/moment-01.png",
     text: "something",
     description: "",
   },
   {
-    image: "/moments/moment-06.jpg",
+    image: "/moments/moment-01.png",
     text: "something",
     description: "",
   },
@@ -63,7 +63,8 @@ export default function Gallery() {
           borderRadius={0.05}
           scrollEase={0.05}
           scrollSpeed={2}
-          size={1.15}
+          size={1.02}
+          mobileSize={0.85}
           font="bold 30px Orbitron"
           fontUrl="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"
         />

@@ -28,6 +28,12 @@ function autoBind(instance: any): void {
   });
 }
 
+// Arc reference: the raw `bend` prop was tuned on a desktop full-bleed stage,
+// where the viewport half-width is ~18 world units (fov 45°, camera z 20). The
+// effective bend is scaled by the actual half-width, so every screen gets the
+// same relative curvature instead of a tiny, over-curled arc on phones.
+const BEND_REF_HALF_WIDTH = 18;
+
 const DEFAULT_FONT = 'bold 30px Figtree';
 // Figtree is not guaranteed to be available on the host page, so the component
 // loads it on demand whenever the default font is used.
@@ -276,6 +282,8 @@ interface MediaProps {
   borderRadius?: number;
   font?: string;
   size: number;
+  /** Card size used on screens ≤767px (falls back to `size`). */
+  mobileSize?: number;
 }
 
 class Media {
@@ -297,6 +305,8 @@ class Media {
   borderRadius: number;
   font?: string;
   size: number;
+  mobileSize: number;
+  bendEffective: number = 0;
   program!: Program;
   plane!: Mesh;
   title!: Title;
@@ -327,7 +337,8 @@ class Media {
     descriptionColor,
     borderRadius = 0,
     font,
-    size
+    size,
+    mobileSize
   }: MediaProps) {
     this.geometry = geometry;
     this.gl = gl;
@@ -346,6 +357,7 @@ class Media {
     this.borderRadius = borderRadius;
     this.font = font;
     this.size = size;
+    this.mobileSize = mobileSize ?? size;
     this.createShader();
     this.createMesh();
     this.createTitle();
@@ -471,12 +483,14 @@ class Media {
       this.plane.position.y = 0;
       this.plane.rotation.z = 0;
     } else {
-      const B_abs = Math.abs(this.bend);
+      // Scale the arc to the current viewport so narrow screens get the same
+      // relative curvature (raw `bend` would over-curl them).
+      const B_abs = Math.abs(this.bendEffective);
       const R = (H * H + B_abs * B_abs) / (2 * B_abs);
       const effectiveX = Math.min(Math.abs(x), H);
 
       const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
-      if (this.bend > 0) {
+      if (this.bendEffective > 0) {
         this.plane.position.y = -arc;
         this.plane.rotation.z = -Math.sign(x) * Math.asin(effectiveX / R);
       } else {
@@ -511,10 +525,16 @@ class Media {
         this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
       }
     }
+    const isMobile = this.screen.width <= 767;
     this.scale = this.screen.height / 1500;
-    // `size` scales the planes up/down from the original 900x700 design.
-    this.plane.scale.y = (this.viewport.height * (900 * this.scale * this.size)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (700 * this.scale * this.size)) / this.screen.width;
+    // `size` scales the planes up/down from the original 900x700 design;
+    // `mobileSize` applies on small screens instead.
+    const size = isMobile ? this.mobileSize : this.size;
+    this.plane.scale.y = (this.viewport.height * (900 * this.scale * size)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (700 * this.scale * size)) / this.screen.width;
+    // Scale the bend arc with the viewport half-width so the curvature is
+    // screen-relative (a fixed arc over-curled small screens).
+    this.bendEffective = (this.bend * (this.viewport.width / 2)) / BEND_REF_HALF_WIDTH;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
     this.padding = 2 * this.size;
     this.width = this.plane.scale.x + this.padding;
@@ -533,12 +553,18 @@ interface AppConfig {
   scrollSpeed?: number;
   scrollEase?: number;
   size?: number;
+  /** Card size used on screens ≤767px (falls back to `size`). */
+  mobileSize?: number;
 }
 
 class App {
   container: HTMLElement;
   scrollSpeed: number;
   bend: number;
+  // False while the stage is scrolled out of view: input handlers and the
+  // render loop then ignore the gallery entirely.
+  isVisible: boolean = true;
+  observer: IntersectionObserver | null = null;
   scroll: {
     ease: number;
     current: number;
@@ -579,7 +605,8 @@ class App {
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
       scrollEase = 0.05,
-      size = 1
+      size = 1,
+      mobileSize
     }: AppConfig
   ) {
     document.documentElement.classList.remove('no-js');
@@ -593,7 +620,7 @@ class App {
     this.createScene();
     this.onResize();
     this.createGeometry();
-    this.createMedias(items, bend, textColor, descriptionColor, borderRadius, font, size);
+    this.createMedias(items, bend, textColor, descriptionColor, borderRadius, font, size, mobileSize ?? size);
     this.update();
     this.addEventListeners();
   }
@@ -633,7 +660,8 @@ class App {
     descriptionColor: string,
     borderRadius: number,
     font: string,
-    size: number
+    size: number,
+    mobileSize: number
   ) {
     const defaultItems = [
       {
@@ -705,37 +733,55 @@ class App {
         descriptionColor,
         borderRadius,
         font,
-        size
+        size,
+        mobileSize
       });
     });
   }
 
   onTouchDown(e: MouseEvent | TouchEvent) {
+    if (!this.isVisible || !this.isPointerOverStage(e)) return;
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = 'touches' in e ? e.touches[0].clientX : e.clientX;
   }
 
   onTouchMove(e: MouseEvent | TouchEvent) {
-    if (!this.isDown) return;
+    if (!this.isDown || !this.isVisible) return;
     const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = (this.scroll.position ?? 0) + distance;
   }
 
   onTouchUp() {
+    if (!this.isDown) return;
     this.isDown = false;
     this.onCheck();
   }
 
+  /** True when the pointer event happened inside the gallery stage. */
+  isPointerOverStage(e: MouseEvent | TouchEvent): boolean {
+    const rect = this.container.getBoundingClientRect();
+    const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  }
+
   onWheel(e: Event) {
+    // The page's vertical scroll must scroll the page — never hijack deltaY.
+    // Only horizontal trackpad pans (deltaX dominant) drive the gallery, and
+    // only while the stage is actually on screen.
+    if (!this.isVisible) return;
     const wheelEvent = e as WheelEvent;
-    const delta = wheelEvent.deltaY || (wheelEvent as any).wheelDelta || (wheelEvent as any).detail;
-    this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
+    const dx = wheelEvent.deltaX ?? 0;
+    const dy = wheelEvent.deltaY ?? 0;
+    if (Math.abs(dx) <= Math.abs(dy)) return;
+    this.scroll.target += (dx > 0 ? 1 : -1) * this.scrollSpeed;
     this.onCheckDebounce();
   }
 
   onKeyDown(e: KeyboardEvent) {
+    if (!this.isVisible) return;
     switch (e.key) {
       case 'ArrowRight':
         e.preventDefault();
@@ -794,13 +840,16 @@ class App {
   }
 
   update() {
-    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
-    const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
-    if (this.medias) {
-      this.medias.forEach(media => media.update(this.scroll, direction));
+    // Skip the work entirely while the stage is scrolled out of view.
+    if (this.isVisible) {
+      this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
+      const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
+      if (this.medias) {
+        this.medias.forEach(media => media.update(this.scroll, direction));
+      }
+      this.renderer.render({ scene: this.scene, camera: this.camera });
+      this.scroll.last = this.scroll.current;
     }
-    this.renderer.render({ scene: this.scene, camera: this.camera });
-    this.scroll.last = this.scroll.current;
     this.raf = window.requestAnimationFrame(this.update.bind(this));
   }
 
@@ -823,10 +872,26 @@ class App {
     window.addEventListener('touchend', this.boundOnTouchUp);
 
     this.container?.addEventListener('keydown', this.boundOnKeyDown);
+
+    this.observeVisibility();
+  }
+
+  /** Pauses input + rendering while the stage is scrolled off-screen. */
+  observeVisibility() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    this.observer = new IntersectionObserver(
+      entries => {
+        this.isVisible = entries[0]?.isIntersecting ?? true;
+      },
+      { rootMargin: '80px' }
+    );
+    this.observer.observe(this.container);
   }
 
   destroy() {
     window.cancelAnimationFrame(this.raf);
+    this.observer?.disconnect();
+    this.observer = null;
     window.removeEventListener('resize', this.boundOnResize);
     window.removeEventListener('mousewheel', this.boundOnWheel);
     window.removeEventListener('wheel', this.boundOnWheel);
@@ -857,6 +922,8 @@ interface CircularGalleryProps {
   scrollEase?: number;
   /** Multiplier on the photo planes' size (1 = the original 900x700 design). */
   size?: number;
+  /** Card size used on screens ≤767px (falls back to `size`). */
+  mobileSize?: number;
 }
 
 export default function CircularGallery({
@@ -869,7 +936,8 @@ export default function CircularGallery({
   fontUrl,
   scrollSpeed = 2,
   scrollEase = 0.05,
-  size = 1
+  size = 1,
+  mobileSize
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -887,14 +955,20 @@ export default function CircularGallery({
         font: resolvedFont,
         scrollSpeed,
         scrollEase,
-        size
+        size,
+        mobileSize
       });
+      // Debug handle (used by automated checks): read scroll/render state.
+      (containerRef.current as unknown as { __galleryApp?: App }).__galleryApp = app;
     });
     return () => {
       isMounted = false;
+      if (containerRef.current) {
+        (containerRef.current as unknown as { __galleryApp?: App }).__galleryApp = undefined;
+      }
       if (app) app.destroy();
     };
-  }, [items, bend, textColor, descriptionColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, size]);
+  }, [items, bend, textColor, descriptionColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, size, mobileSize]);
   return (
     <div
       className="circular-gallery"

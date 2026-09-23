@@ -18,7 +18,7 @@ export default function Events() {
             {/* Same photo as the first card in the Moments carousel
                 (public/moments/moment-01.png) — swap both for a real MOSAIC shot */}
             <Image
-              src="/events/mosaic.jpg"
+              src="/events/mosaic.png"
               alt="Attendees at a past ECSSA technical fest"
               width={600}
               height={400}

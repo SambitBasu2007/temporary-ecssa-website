@@ -33,7 +33,7 @@ export default function Committee() {
 
         <Reveal delay={200}>
           <p className="committee__more">
-            <Link href="/committee" className="link-arrow">
+            <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" className="link-arrow">
               View full committee →
             </Link>
           </p>

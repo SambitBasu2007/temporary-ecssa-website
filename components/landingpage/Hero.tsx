@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
@@ -8,43 +8,27 @@ import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 import "./Hero.css";
 
 export default function Hero() {
-  const [showLottie, setShowLottie] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!showLottie || !canvasRef.current) return;
-
-    let dotLottie: import("@lottiefiles/dotlottie-web").DotLottie | null = null;
-
-    import("@lottiefiles/dotlottie-web").then(({ DotLottie }) => {
-      dotLottie = new DotLottie({
-        canvas: canvasRef.current!,
-        src: "/landingpage/logo.lottie",
-        autoplay: true,
-        loop: true,
-      });
-    });
-
-    return () => {
-      dotLottie?.destroy();
-    };
-  }, [showLottie]);
+  const [showVideo, setShowVideo] = useState(false);
 
   return (
     <section id="hero" className="hero">
       <div className="hero__inner">
         <div className="hero__content" data-stagger>
 
-          {/* Logo area — click the PNG to switch to the Lottie animation */}
+          {/* Logo area — click the PNG to play the WebM animation (click again to stop) */}
           <div className="hero__logo-wrap">
-            {showLottie ? (
-              <canvas
-                ref={canvasRef}
-                className="hero__logo hero__logo--lottie"
+            {showVideo ? (
+              <video
+                className="hero__logo hero__logo--video"
+                src="/landingpage/logo.webm"
                 width={482}
                 height={476}
+                autoPlay
+                loop
+                muted
+                playsInline
                 aria-label="ECSSA animated logo"
-                onClick={() => setShowLottie(false)}
+                onClick={() => setShowVideo(false)}
               />
             ) : (
               <>
@@ -59,7 +43,7 @@ export default function Hero() {
                 {/* Hit area: inset 8 px on every side so it's visibly smaller than the image */}
                 <button
                   className="hero__logo-btn"
-                  onClick={() => setShowLottie(true)}
+                  onClick={() => setShowVideo(true)}
                   aria-label="Animate the ECSSA logo"
                 />
               </>

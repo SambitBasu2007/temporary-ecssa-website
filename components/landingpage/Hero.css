@@ -37,6 +37,12 @@
   width: 100%;
   max-width: 400px;
   height: auto;
+
+  /* Lock the PNG and the animated WebM to the same rendered box, so toggling
+     between them never resizes the layout. The video letterboxes into this
+     frame (object-fit) if its intrinsic pixels differ. */
+  aspect-ratio: 482 / 476;
+  object-fit: contain;
 }
 
 /* Invisible hit-target inset 8 px on every side so it's slightly smaller
@@ -56,9 +62,18 @@
   transform: scale(0.97);
 }
 
-/* Canvas (Lottie state) is also clickable — pointer cursor signals this */
-.hero__logo--lottie {
-  cursor: pointer;
+/* Video (animated logo state) is also clickable — pointer cursor signals it */
+.hero__logo--video {
+  display: block;
+}
+
+/* On desktop the WebM's artwork reads slightly larger than the PNG (the video
+   is cropped tighter than the PNG's baked-in padding). Shrink it a touch so
+   both states feel the same size; layout is untouched (transform only). */
+@media (min-width: 768px) {
+  .hero__logo--video {
+    transform: scale(0.97);
+  }
 }
 
 .hero__tagline {
