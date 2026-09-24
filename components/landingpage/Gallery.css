@@ -1,11 +1,60 @@
-.gallery__stage {
-  position: relative;
-  height: 820px;
-  margin-top: 16px;
+/* Full-bleed horizontal rail of photos. Native overflow scrolling does the
+   work — one card per snap point, so trackpad pans, touch swipes, arrow keys
+   and the buttons below all move through the same list. Gallery.tsx renders
+   identical copies of the list and keeps the rail inside the middle one, which
+   is what makes the scroll endless. */
+.gallery__rail {
+  display: flex;
+  gap: 20px;
+  margin-top: 28px;
+  padding: 4px var(--gutter) 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+
+  /* Mandatory, not proximity: a fast flick always settles on a photo instead of
+     coasting to a random offset, which made quick scrolling feel out of hand. */
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+
+  /* Hidden because the loop shifts the rail by a whole copy: a native scrollbar
+     would visibly jump every time. The arrows below stay the affordance. */
+  scrollbar-width: none;
 }
 
-.gallery__stage canvas {
-  display: block;
+.gallery__rail::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__rail {
+    scroll-behavior: auto;
+  }
+}
+
+.gallery__item {
+  /* Card width drives the rail; the 4/5 frame below keeps every photo the same
+     shape no matter what the file's own aspect ratio is. */
+  flex: 0 0 clamp(220px, 28vw, 340px);
+  scroll-snap-align: start;
+}
+
+.gallery__image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.gallery__text {
+  margin-top: 10px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-muted);
 }
 
 .gallery__caption {
@@ -20,15 +69,33 @@
   color: var(--text-muted);
 }
 
-.gallery__caption svg {
+.gallery__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   color: var(--blue);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease),
+    transform 0.12s var(--ease);
+}
+
+.gallery__arrow:hover {
+  background: var(--blue-soft);
+  border-color: var(--blue);
+}
+
+.gallery__arrow:active {
+  transform: scale(0.94);
 }
 
 /* ------------------------------- responsive ------------------------------ */
 
 @media (max-width: 767px) {
-  .gallery__stage {
-    height: 560px;
-    margin-top: 8px;
+  .gallery__rail {
+    margin-top: 20px;
   }
 }

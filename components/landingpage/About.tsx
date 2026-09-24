@@ -44,7 +44,7 @@ export default function About() {
 
         <Reveal delay={200} className="about__pattern">
           <svg viewBox="0 0 320 320" fill="none" role="presentation" aria-hidden="true">
-            <g stroke="var(--navy)" strokeWidth="1.5" opacity="0.35">
+            <g stroke="var(--navy)" strokeWidth="2.25" opacity="0.35">
               <path d="M40 60H150L210 120H280" />
               <path d="M40 160H110L170 220H280" />
               <path d="M120 20V80" />
@@ -57,7 +57,7 @@ export default function About() {
               <circle cx="40" cy="160" r="4" />
               <circle cx="280" cy="220" r="4" />
             </g>
-            <g fill="none" stroke="var(--blue-line)" strokeWidth="1.5">
+            <g fill="none" stroke="var(--blue-line)" strokeWidth="2.25">
               <rect x="150" y="20" width="88" height="64" rx="6" />
               <rect x="228" y="240" width="56" height="56" rx="6" />
               <rect x="46" y="196" width="52" height="52" rx="6" />

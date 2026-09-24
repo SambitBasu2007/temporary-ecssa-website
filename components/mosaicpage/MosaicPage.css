@@ -1,0 +1,156 @@
+/* ---------------------------------------------------------------------------
+   MOSAIC page — "under construction" signpost.
+   Full-bleed MOSAIC yellow with black type, so the four-colour site palette
+   doesn't apply here (same scoped exception as .hero__register).
+   --------------------------------------------------------------------------- */
+
+.mosaic-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 56px);
+  min-height: 100dvh;
+  padding: 48px var(--gutter);
+  background: #eee500;
+  color: var(--black);
+  text-align: center;
+}
+
+.mosaic-page__title {
+  position: relative;
+  font-size: clamp(2.25rem, 1.2rem + 5.4vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: var(--black);
+
+  /* The whole line nudges a pixel or two while the glitch bands flash. */
+  animation: mosaic-glitch-shift 1.3s steps(1, end) infinite;
+}
+
+/* Two stacked copies of the text, each revealed in a thin band for a couple of
+   frames. attr(data-text) keeps them in sync with the real heading. */
+.mosaic-page__title::before,
+.mosaic-page__title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: var(--black);
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
+}
+
+.mosaic-page__title::before {
+  animation: mosaic-glitch-a 1.3s steps(1, end) infinite;
+}
+
+.mosaic-page__title::after {
+  animation: mosaic-glitch-b 1.3s steps(1, end) infinite;
+}
+
+.mosaic-page__logo {
+  width: min(78vw, 420px);
+  height: auto;
+}
+
+/* Way back to the main site. White on the yellow, with the same black edge and
+   proportions as the hero's register button. */
+.mosaic-page__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border: 2px solid var(--black);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--black);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transition: background-color 0.2s var(--ease), transform 0.12s var(--ease);
+}
+
+.mosaic-page__back:hover {
+  background: #f1f1f1;
+}
+
+.mosaic-page__back:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 767px) {
+  .mosaic-page__back {
+    width: min(78vw, 300px);
+    padding: 18px 12px;
+  }
+}
+
+/* -------------------------------- glitch --------------------------------- */
+/* One 1.3s cycle: bands flicker for ~90ms, then the heading is clean for the
+   rest of the second, so it reads as an occasional twitch rather than noise.
+   Offsets stay within 2–3px to keep it subtle. Each animation ends with an
+   explicit hidden keyframe, because steps(1, end) holds a segment's *start*
+   value — without it the last band would stay on for the whole cycle. */
+
+@keyframes mosaic-glitch-a {
+  0%,
+  1.5%,
+  9.5%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  3% {
+    clip-path: inset(6% 0 64% 0);
+    transform: translate(-3px, -1px);
+  }
+  5.5% {
+    clip-path: inset(46% 0 26% 0);
+    transform: translate(3px, 1px);
+  }
+  8% {
+    clip-path: inset(70% 0 8% 0);
+    transform: translate(-2px, 2px);
+  }
+}
+
+@keyframes mosaic-glitch-b {
+  0%,
+  2%,
+  8.5%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  4% {
+    clip-path: inset(30% 0 44% 0);
+    transform: translate(2px, -2px);
+  }
+  6.5% {
+    clip-path: inset(60% 0 18% 0);
+    transform: translate(-2px, 1px);
+  }
+}
+
+@keyframes mosaic-glitch-shift {
+  0%,
+  1%,
+  100% {
+    transform: none;
+  }
+  3.5% {
+    transform: translate(1px, 1px);
+  }
+  6% {
+    transform: translate(-1px, 0);
+  }
+  8% {
+    transform: none;
+  }
+}
+
+/* Reduced motion is handled globally (app/globals.css collapses every
+   animation), which parks both copies on their hidden keyframe. */

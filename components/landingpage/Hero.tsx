@@ -15,39 +15,64 @@ export default function Hero() {
       <div className="hero__inner">
         <div className="hero__content" data-stagger>
 
-          {/* Logo area — click the PNG to play the WebM animation (click again to stop) */}
-          <div className="hero__logo-wrap">
-            {showVideo ? (
-              <video
-                className="hero__logo hero__logo--video"
-                src="/landingpage/logo.webm"
-                width={482}
-                height={476}
-                autoPlay
-                loop
-                muted
-                playsInline
-                aria-label="ECSSA animated logo"
-                onClick={() => setShowVideo(false)}
-              />
-            ) : (
-              <>
-                <Image
-                  src="/landingpage/logo.png"
-                  alt="ECSSA — Electronics and Computer Science Student Association"
+          {/* Logo + MOSAIC registration. On desktop they sit side by side as two
+              equally sized sections; on mobile they stack with the button on top. */}
+          <div className="hero__top">
+            {/* Logo area — click the PNG to play the WebM animation (click again to stop) */}
+            <div className="hero__logo-wrap">
+              {showVideo ? (
+                <video
+                  className="hero__logo hero__logo--video"
+                  src="/landingpage/logo.webm"
                   width={482}
                   height={476}
-                  className="hero__logo"
-                  priority
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  aria-label="ECSSA animated logo"
+                  onClick={() => setShowVideo(false)}
                 />
-                {/* Hit area: inset 8 px on every side so it's visibly smaller than the image */}
-                <button
-                  className="hero__logo-btn"
-                  onClick={() => setShowVideo(true)}
-                  aria-label="Animate the ECSSA logo"
-                />
-              </>
-            )}
+              ) : (
+                <>
+                  <Image
+                    src="/landingpage/logo.png"
+                    alt="ECSSA — Electronics and Computer Science Student Association"
+                    width={482}
+                    height={476}
+                    className="hero__logo"
+                    priority
+                  />
+                  {/* Hit area: inset 8 px on every side so it's visibly smaller than the image */}
+                  <button
+                    className="hero__logo-btn"
+                    onClick={() => setShowVideo(true)}
+                    aria-label="Animate the ECSSA logo"
+                  />
+                </>
+              )}
+            </div>
+
+            <div className="hero__promo">
+              <Image
+                src="/landingpage/mosaic.png"
+                alt="MOSAIC — ECSSA's technical fest"
+                width={1200}
+                height={1200}
+                className="hero__promo-logo"
+              />
+              {/* data-text feeds the ::before / ::after glitch copies in Hero.css.
+                  The copies are real generated content, so the accessibility tree
+                  would read the label three times — aria-label keeps it to one. */}
+              <Link
+                href="/mosaic"
+                className="hero__register"
+                data-text="REGISTER FOR MOSAIC"
+                aria-label="REGISTER FOR MOSAIC"
+              >
+                REGISTER FOR MOSAIC
+              </Link>
+            </div>
           </div>
 
           <p className="hero__tagline">Innovate • Collaborate • Inspire</p>

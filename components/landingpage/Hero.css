@@ -26,6 +26,18 @@
   text-align: center;
 }
 
+/* Two equally sized sections side by side: the logo on the left, the MOSAIC
+   promo (artwork above the register button) on the right. 864px = 2 × 400px
+   sections + the 64px gap that separates them. */
+.hero__top {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 864px;
+}
+
 .hero__logo-wrap {
   position: relative;
   display: inline-flex;
@@ -73,6 +85,112 @@
 @media (min-width: 768px) {
   .hero__logo--video {
     transform: scale(0.97);
+  }
+}
+
+.hero__promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Fills its section, so the MOSAIC artwork matches the logo's scale. */
+.hero__promo-logo {
+  width: 100%;
+  height: auto;
+}
+
+/* MOSAIC's brand yellow — the one place the page steps outside its four-colour
+   palette, so it stays scoped to the hero register button. The margin gives
+   the bordered button a little breathing room in its section. */
+.hero__register {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+  padding: 18px 32px;
+  border: 2px solid var(--black);
+  border-radius: var(--radius);
+  background: #eee500;
+  color: var(--black);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transition: background-color 0.2s var(--ease), transform 0.12s var(--ease);
+}
+
+.hero__register:hover {
+  background: #d9d000;
+}
+
+.hero__register:active {
+  transform: scale(0.98);
+}
+
+/* Same trick as the MOSAIC page: two stacked copies of the label, each showing
+   through a thin band for a couple of frames. A 1.9s cycle keeps it occasional
+   and off-beat from the heading animation. */
+.hero__register::before,
+.hero__register::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
+}
+
+.hero__register::before {
+  animation: hero-glitch-a 1.9s steps(1, end) infinite;
+}
+
+.hero__register::after {
+  animation: hero-glitch-b 1.9s steps(1, end) infinite;
+}
+
+/* Bands flicker for ~105ms, then the label is clean for the rest of the cycle.
+   Each track ends with an explicit hidden keyframe: steps(1, end) holds a
+   segment's *start* value, so without it the last band stays on all cycle. */
+@keyframes hero-glitch-a {
+  0%,
+  1.5%,
+  7%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  3% {
+    clip-path: inset(34% 0 40% 0);
+    transform: translate(-3px, -1px);
+  }
+  5% {
+    clip-path: inset(48% 0 18% 0);
+    transform: translate(3px, 1px);
+  }
+}
+
+@keyframes hero-glitch-b {
+  0%,
+  2%,
+  6.5%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  3.5% {
+    clip-path: inset(42% 0 32% 0);
+    transform: translate(3px, 1px);
+  }
+  5.5% {
+    clip-path: inset(58% 0 14% 0);
+    transform: translate(-3px, -1px);
   }
 }
 
@@ -134,6 +252,34 @@
   .hero__logo-wrap,
   .hero__logo {
     max-width: 300px;
+  }
+
+  /* Stacked with the button first: the MOSAIC artwork is dropped on mobile. */
+  .hero__top {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 28px;
+    max-width: 300px;
+  }
+
+  .hero__promo {
+    order: -1;
+  }
+
+  .hero__promo-logo {
+    display: none;
+  }
+
+  /* Slightly larger than the desktop button and as wide as the logo's visible
+     artwork — logo.png is a 482px-wide canvas whose mark only spans ~78% of it,
+     so matching the box here would read as wider than the logo. The inline
+     padding is tight because the fixed width, not the padding, sets the size
+     (and the 2px border eats into it). */
+  .hero__register {
+    width: 78.4%;
+    padding: 20px 8px;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
   }
 
   .hero__tagline {
