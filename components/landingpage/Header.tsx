@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Equals, X } from "@phosphor-icons/react";
+import StaggeredMenu, {
+  type StaggeredMenuItem,
+  type StaggeredMenuSocialItem,
+} from "@/components/StaggeredMenu/StaggeredMenu";
 
 import "./Header.css";
 
@@ -14,48 +16,23 @@ const NAV_LINKS = [
   { label: "Gallery", href: "#gallery" },
 ];
 
-const JOIN_HREF = "#join";
+
+const MENU_ITEMS: StaggeredMenuItem[] = [
+  { label: "About", ariaLabel: "Learn about ECSSA", link: "#about" },
+  { label: "Domains", ariaLabel: "Explore Electronics & CS domains", link: "#domains" },
+  { label: "Events", ariaLabel: "Upcoming events", link: "#events" },
+  { label: "Gallery", ariaLabel: "Moments photo gallery", link: "#gallery" },
+  { label: "Join Us", ariaLabel: "Connect with ECSSA", link: "#join" },
+  { label: "MOSAIC 2026", ariaLabel: "Visit MOSAIC technical fest page", link: "/mosaic" },
+];
+
+const SOCIAL_ITEMS: StaggeredMenuSocialItem[] = [
+  { label: "Instagram", link: "https://www.instagram.com/team_ecssa" },
+  { label: "LinkedIn", link: "https://www.linkedin.com/company/ecssa-sfit/" },
+  { label: "GitHub", link: "https://github.com" },
+];
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Lock body scroll while the mobile sidebar is open.
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isMenuOpen]);
-
-  // Close on Escape and whenever the viewport grows past the mobile breakpoint.
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsMenuOpen(false);
-    };
-
-    const desktopQuery = window.matchMedia("(min-width: 768px)");
-    const handleBreakpointChange = () => {
-      if (desktopQuery.matches) setIsMenuOpen(false);
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    desktopQuery.addEventListener("change", handleBreakpointChange);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      desktopQuery.removeEventListener("change", handleBreakpointChange);
-    };
-  }, [isMenuOpen]);
-
-  // The sidebar and its backdrop are rendered *outside* the fixed header:
-  // `backdrop-filter` on the header makes it the containing block for
-  // fixed-position descendants, which would clip them to the header box.
   return (
     <>
       <header className="site-header">
@@ -77,75 +54,23 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href={JOIN_HREF} className="btn btn--primary btn--sm site-header__cta">
-              Join Us
-            </Link>
+            <span className="site-header__cta-spacer" aria-hidden="true" />
           </nav>
-
-          <button
-            type="button"
-            className="site-header__menu-button"
-            onClick={() => setIsMenuOpen(true)}
-            aria-label="Open navigation menu"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-sidebar"
-          >
-            <Equals size={24} aria-hidden="true" />
-          </button>
         </div>
       </header>
 
-      <div
-        className={`sidebar-backdrop${isMenuOpen ? " sidebar-backdrop--open" : ""}`}
-        onClick={() => setIsMenuOpen(false)}
-        aria-hidden="true"
+      <StaggeredMenu
+        isFixed
+        items={MENU_ITEMS}
+        socialItems={SOCIAL_ITEMS}
+        displaySocials={true}
+        displayItemNumbering={true}
+        colors={["#041b3b", "#025bb5", "#0374df"]}
+        accentColor="#0374df"
+        menuButtonColor="#041b3b"
+        openMenuButtonColor="#041b3b"
+        changeMenuColorOnOpen={true}
       />
-
-      <aside
-        id="mobile-sidebar"
-        className={`sidebar${isMenuOpen ? " sidebar--open" : ""}`}
-        aria-label="Mobile navigation"
-        aria-hidden={!isMenuOpen}
-      >
-        <div className="sidebar__top">
-          <Image
-            src="/landingpage/logo.png"
-            alt="ECSSA"
-            width={482}
-            height={476}
-            className="sidebar__logo"
-          />
-          <button
-            type="button"
-            className="sidebar__close"
-            onClick={() => setIsMenuOpen(false)}
-            aria-label="Close navigation menu"
-          >
-            <X size={22} aria-hidden="true" />
-          </button>
-        </div>
-
-        <nav className="sidebar__nav" aria-label="Mobile primary">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="sidebar__link"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        <Link
-          href={JOIN_HREF}
-          className="btn btn--primary btn--block sidebar__cta"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Join Us
-        </Link>
-      </aside>
     </>
   );
 }

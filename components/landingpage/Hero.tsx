@@ -60,6 +60,7 @@ export default function Hero() {
                 width={1200}
                 height={1200}
                 className="hero__promo-logo"
+                priority
               />
               {/* data-text feeds the ::before / ::after glitch copies in Hero.css.
                   The copies are real generated content, so the accessibility tree
