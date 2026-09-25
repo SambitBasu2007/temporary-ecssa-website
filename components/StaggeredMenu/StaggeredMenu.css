@@ -4,6 +4,7 @@
   height: 100%;
   z-index: 40;
   pointer-events: none;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 .staggered-menu-wrapper.fixed-wrapper {
@@ -157,6 +158,7 @@
   height: 100%;
   background: var(--sm-panel-bg, #ffffff);
   color: var(--sm-panel-color, #041b3b);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   display: flex;
@@ -264,6 +266,7 @@
 }
 
 .sm-socials-link {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--sm-panel-color, #041b3b);
@@ -300,6 +303,7 @@
 .sm-panel-item {
   position: relative;
   color: var(--sm-panel-color, #041b3b);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-weight: 700;
   font-size: clamp(2rem, 1.4rem + 1.8vw, 3rem);
   cursor: pointer;
